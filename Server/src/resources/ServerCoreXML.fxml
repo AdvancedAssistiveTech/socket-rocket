@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Accordion?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<TabPane fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="core.Controller">
+  <tabs>
+    <Tab fx:id="tabChat" closable="false" text="Chat">
+         <content>
+            <GridPane>
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="75.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="25.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="300.0" vgrow="ALWAYS" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="NEVER" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="NEVER" />
+              </rowConstraints>
+               <children>
+                  <ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="300.0" prefWidth="300.0">
+                     <content>
+                        <VBox fx:id="holderPane" prefHeight="300.0" prefWidth="300.0" style="-fx-background-color: #ccffff;" />
+                     </content>
+                  </ScrollPane>
+                  <TextField fx:id="txtMessage" prefHeight="30.0" prefWidth="300.0" GridPane.rowIndex="1" GridPane.vgrow="NEVER" />
+                  <Button mnemonicParsing="false" onAction="#clickSend" prefHeight="30.0" text="Send" GridPane.rowIndex="2" GridPane.vgrow="NEVER" />
+               </children>
+            </GridPane>
+         </content>
+    </Tab>
+    <Tab closable="false" text="Files">
+         <content>
+            <GridPane fx:id="filesGrid">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="75.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="25.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" prefHeight="200.0" prefWidth="450.0">
+                     <content>
+                        <TableView fx:id="tblFiles" prefHeight="360.0" prefWidth="600.0">
+                           <columns>
+                              <TableColumn fx:id="nameColumn" editable="false" minWidth="75.0" prefWidth="224.0" text="Name" />
+                              <TableColumn fx:id="sizeColumn" editable="false" minWidth="75.0" prefWidth="224.0" text="Size" />
+                           </columns>
+                        </TableView>
+                     </content>
+                  </ScrollPane>
+                  <VBox fx:id="filesSideBox" prefHeight="200.0" prefWidth="100.0" style="-fx-border-color: grey;" GridPane.columnIndex="1" />
+               </children>
+            </GridPane>
+         </content>
+    </Tab>
+      <Tab closable="false" text="Connection">
+         <content>
+            <Accordion>
+              <panes>
+                <TitledPane text="New connections">
+                     <content>
+                        <HBox prefHeight="100.0" prefWidth="200.0">
+                           <children>
+                              <Button fx:id="btnWrite" mnemonicParsing="false" onAction="#clickWrite" style="-fx-background-color: #ffcccc;" text="Write connection info to file" />
+                           </children>
+                        </HBox>
+                     </content>
+                  </TitledPane>
+                <TitledPane text="Info" />
+              </panes>
+            </Accordion>
+         </content>
+      </Tab>
+  </tabs>
+</TabPane>

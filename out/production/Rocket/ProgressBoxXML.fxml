@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox fx:id="mainBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="140.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="util.uicomponents.progressbox.FPBController">
+   <children>
+      <Label fx:id="lblFile" alignment="BOTTOM_LEFT" contentDisplay="TEXT_ONLY" text="Downloading &lt;file&gt;">
+         <font>
+            <Font size="24.0" />
+         </font>
+         <padding>
+            <Insets top="10.0" />
+         </padding>
+         <VBox.margin>
+            <Insets left="10.0" right="10.0" top="10.0" />
+         </VBox.margin>
+      </Label>
+      <ProgressBar fx:id="progressBar" prefHeight="35.0" prefWidth="300.0" progress="0.0">
+         <VBox.margin>
+            <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
+         </VBox.margin>
+      </ProgressBar>
+      <Button fx:id="btnCancel" mnemonicParsing="false" onAction="#clickCancel" prefHeight="30.0" prefWidth="300.0" text="Cancel">
+         <VBox.margin>
+            <Insets bottom="10.0" left="10.0" right="10.0" />
+         </VBox.margin>
+      </Button>
+   </children>
+</VBox>

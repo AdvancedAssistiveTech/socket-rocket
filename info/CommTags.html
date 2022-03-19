@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Standard Backslash Tags for Rocket</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Questrial&family=Raleway&display=swap" rel="stylesheet">
+    <style>
+        table {
+            border: 1px solid black;
+        }
+        th, td {
+            border: 1px solid white;
+            padding-top: 5px;
+            padding-bottom: 5px;
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+        body {
+            background-color:#ffe6af;
+        }
+        p, th, td {
+            background-color: #96D4D4;
+        }
+        h1, h2 {
+            font-family: Questrial, Trebuchet MS;
+        }
+        p, table {
+            font-family: Raleway, Tahoma;
+        }
+    </style>
+</head>
+  <body>
+  <h1> <b><u>Reference Sheet: Socket Message Backslash Tags </u></b> </h1>
+
+    <h2> Brief </h2>
+    <p>
+        Rocket makes use of socket connections to send communications encoded in the UTF-8 standard between connected machines.
+        These connections can be divided into two categories: <b>user-sent</b> and <b>program-defined</b>.
+        <b>user-sent</b> messages are displayed on the server dashboard as sent, with no other handling undertaken by the program other than the identifying of these strings as plain text.
+        <b>program-defined</b> strings are issued via the socket to indicate that special data is being carried with regard to operations the program is carrying out, such as the upload or download of files,
+        and are prefaced with backslashes to indicate the nature of the data being transferred.
+        <br>
+        Note that <b>user-sent</b> messages are still prefixed, but the rest of their content is unaffected
+    </p>
+
+  <h2> Taglist and functions </h2>
+  <table>
+      <tr>
+          <th>Tag</th> <!-- the tag itself -->
+          <th>Code</th> <!-- the enum code of the tag -->
+          <th>Function</th> <!-- the function of the code in the context of the program -->
+      </tr>
+      <tr>
+          <td>\a</td>
+          <td>ACKNOWLEDGEMENT</td>
+          <td>The <u>ACKNOWLEDGEMENT</u> tag is used by Rocket to confirm that requests have arrived at the endpoint</td>
+      </tr>
+      <tr>
+          <td>\t</td>
+          <td>TEXT</td>
+          <td>The <u>TEXT</u> tag is used by Rocket to preface <b>user-sent</b> strings, which are then not processed any further by the program before being displayed in the message area of the dashboard</td>
+      </tr>
+      <tr>
+          <td>\r</td>
+          <td>DOWNLOAD_REQUEST</td>
+          <td>The <u>DOWNLOAD_REQUEST</u> tag is used by Rocket to indicate a message that contains a port number and file location. The port number is used to connect the client to a new socket that is used to transfer the file pointed to by the location</td>
+      </tr>
+      <tr>
+          <td>\d</td>
+          <td>DOWNLOADABLE_FILE</td>
+          <td>The <u>DOWNLOADABLE_FILE</u> tag is used by Rocket to preface strings containing the particulars of a <b>DownloadableFile</b> object: the name, location, and size in bytes of the file in question</td>
+      </tr>
+      <!--
+      <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+      </tr>
+      -->
+  </table>
+  </body>
+</html>
