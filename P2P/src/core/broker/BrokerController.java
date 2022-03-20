@@ -1,6 +1,6 @@
 package core.broker;
 
-import core.dashboard.GenericController;
+import core.GenericController;
 
 public class BrokerController extends GenericController {
 }

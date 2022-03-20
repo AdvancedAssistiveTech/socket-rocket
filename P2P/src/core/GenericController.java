@@ -1,4 +1,4 @@
-package core.dashboard;
+package core;
 
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
