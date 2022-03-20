@@ -1,6 +1,9 @@
 package util;
 
-import java.io.*;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 
 public class TransferManager {
     private volatile int transferState; //0: inactive, 1: active, 2: complete, -1: interrupted

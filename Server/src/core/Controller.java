@@ -14,8 +14,8 @@ import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import util.DownloadableFile;
 import util.enums.Tags;
-import util.uicomponents.progressbox.FileProgressBox;
 import util.sockets.TransferSocketManager;
+import util.uicomponents.progressbox.FileProgressBox;
 
 import java.io.FileNotFoundException;
 import java.util.Formatter;
