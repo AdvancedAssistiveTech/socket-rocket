@@ -1,4 +1,4 @@
-package core;
+package core.controllers;
 
 import javafx.scene.image.Image;
 import javafx.stage.Stage;

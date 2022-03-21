@@ -1,6 +1,4 @@
-package core.dashboard;
-
-import core.GenericScreen;
+package core.screens;
 
 public class ConnectionDashboard extends GenericScreen {
     public ConnectionDashboard() {

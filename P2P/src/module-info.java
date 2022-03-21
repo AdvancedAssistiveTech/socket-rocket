@@ -8,8 +8,8 @@ module P2P {
     opens core to javafx.graphics, javafx.fxml;
 
     exports core;
-    exports core.dashboard;
-    opens core.dashboard to javafx.fxml, javafx.graphics;
-    exports core.broker;
-    opens core.broker to javafx.fxml, javafx.graphics;
+    exports core.controllers;
+    opens core.controllers to javafx.fxml, javafx.graphics;
+    exports core.screens;
+    opens core.screens to javafx.fxml, javafx.graphics;
 }

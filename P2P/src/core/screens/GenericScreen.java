@@ -1,5 +1,6 @@
-package core;
+package core.screens;
 
+import core.controllers.GenericController;
 import core.gui_elements.GenericGUIElement;
 import javafx.stage.Stage;
 

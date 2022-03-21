@@ -12,14 +12,13 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<TabPane fx:id="mainPanel" prefWidth="400.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="core.dashboard.DashboardController">
+<TabPane fx:id="mainPanel" prefWidth="400.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="core.controllers.DashboardController">
    <tabs>
       <Tab text="Outgoing connection">
          <content>
-            <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="335.0" prefWidth="400.0">
+            <VBox fx:id="outgoingBox" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="335.0" prefWidth="400.0">
                <children>
-                  <ImageView fx:id="logoView" fitHeight="214.0" fitWidth="400.0" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fx:id="logoView" fitHeight="245.0" fitWidth="380.0" pickOnBounds="true" preserveRatio="true" />
                   <HBox alignment="CENTER_LEFT" prefHeight="100.0">
                      <children>
                         <Label text="Target ID:">

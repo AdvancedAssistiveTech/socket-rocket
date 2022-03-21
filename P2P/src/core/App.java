@@ -1,6 +1,6 @@
 package core;
 
-import core.dashboard.ConnectionDashboard;
+import core.screens.ConnectionDashboard;
 import javafx.application.Application;
 import javafx.stage.Stage;
 

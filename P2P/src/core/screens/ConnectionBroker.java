@@ -1,6 +1,4 @@
-package core.broker;
-
-import core.GenericScreen;
+package core.screens;
 
 public class ConnectionBroker extends GenericScreen {
     public ConnectionBroker() {
