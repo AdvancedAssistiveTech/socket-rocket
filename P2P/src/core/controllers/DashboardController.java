@@ -1,6 +1,7 @@
 package core.controllers;
 
 import core.gui_elements.IncomingConnection;
+import core.screens.ConnectionBroker;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -27,11 +28,14 @@ public class DashboardController extends GenericController {
     private VBox incomingBox;
     @FXML
     private VBox outgoingBox;
+    @FXML
+    private Label lblTargetID;
 
     private void updateConnectBtnText(String text){
         Platform.runLater(() -> connectBtn.setText(String.format("Connect to %s", text)));
     }
 
+    @Override
     public void setup(Stage stage){
         super.setup(stage);
         stage.setResizable(false);
@@ -52,7 +56,8 @@ public class DashboardController extends GenericController {
         logoView.setFitWidth(mainPanel.getPrefWidth() - 20);
         logoView.setFitHeight(mainPanel.getPrefHeight() - componentHeightTotal);
 
-        targetIDCombo.prefWidthProperty().bind(outgoingBox.widthProperty().subtract(103));
+        targetIDCombo.prefWidthProperty().bind(outgoingBox.widthProperty().subtract(105));
+        System.out.println(lblTargetID.getWidth());
 
         stage.hide();
 
@@ -72,8 +77,7 @@ public class DashboardController extends GenericController {
 
         connectBtn.setOnAction(actionEvent -> {
             System.out.println("button interact");
-            //changeStage(new ConnectionBroker().getController().getCurrentStage());
-            incomingBox.getChildren().add(new IncomingConnection().getRoot());
+            changeStage(new ConnectionBroker(targetIDCombo.getValue()).getController().getCurrentStage());
         });
 
         stage.setTitle("Srocket Connection Dashboard");

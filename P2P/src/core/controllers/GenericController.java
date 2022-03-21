@@ -18,6 +18,10 @@ public abstract class GenericController {
         incomingStage.show();
     }
 
+    public void setTitle(String title){
+        currentStage.setTitle(title);
+    }
+
     public Stage getCurrentStage() {
         return currentStage;
     }
