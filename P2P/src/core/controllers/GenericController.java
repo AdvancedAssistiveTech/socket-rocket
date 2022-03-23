@@ -2,6 +2,7 @@ package core.controllers;
 
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 public abstract class GenericController {
     protected Stage currentStage;
@@ -11,9 +12,14 @@ public abstract class GenericController {
     public void setup(Stage currentStage){
         this.currentStage = currentStage;
         currentStage.getIcons().add(ico_up);
+
+        currentStage.getScene().getWindow().addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, windowEvent -> {
+            // handle window close with an exit() call to terminate the message listening thread as well
+            System.exit(0);
+        });
     }
 
-    public void changeStage(Stage incomingStage){
+    protected void changeStage(Stage incomingStage){
         currentStage.close();
         incomingStage.show();
     }

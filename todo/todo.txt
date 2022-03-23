@@ -1,0 +1,7 @@
+[TODO]
+
+implement filetransfermanager
+finish implementing chatmanager
+sync broker progress bar to steps in connection process (update controller do NOT do this in execution class)
+fix chat socket establishing
+fix gui not updating due to illegalstate exception

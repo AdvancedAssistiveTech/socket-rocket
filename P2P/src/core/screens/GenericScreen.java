@@ -1,7 +1,7 @@
 package core.screens;
 
+import auxiliary.gui_elements.GenericGUIElement;
 import core.controllers.GenericController;
-import core.gui_elements.GenericGUIElement;
 import javafx.stage.Stage;
 
 import java.net.URL;

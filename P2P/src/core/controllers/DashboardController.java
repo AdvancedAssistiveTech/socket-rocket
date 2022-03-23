@@ -1,10 +1,8 @@
 package core.controllers;
 
-import core.gui_elements.IncomingConnection;
 import core.screens.ConnectionBroker;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -12,6 +10,9 @@ import javafx.scene.control.TabPane;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+
+import java.net.ServerSocket;
+import java.net.Socket;
 
 public class DashboardController extends GenericController {
     @FXML
@@ -32,34 +33,17 @@ public class DashboardController extends GenericController {
     private Label lblTargetID;
 
     private void updateConnectBtnText(String text){
-        Platform.runLater(() -> connectBtn.setText(String.format("Connect to %s", text)));
+        connectBtn.setText(String.format("Connect to %s", text));
+    }
+
+    public void brokerIncomingConnection(Socket incomingConnection, ServerSocket binder){
+        Platform.runLater(() -> changeStage(new ConnectionBroker(incomingConnection, binder).getController().getCurrentStage()));
     }
 
     @Override
     public void setup(Stage stage){
         super.setup(stage);
         stage.setResizable(false);
-        stage.show();
-
-        int componentHeightTotal = 0;
-        for(Node index : outgoingBox.getChildren()){
-            if(!index.equals(logoView)){
-                componentHeightTotal += index.getBoundsInParent().getHeight();
-            }
-        }
-        componentHeightTotal += 50;
-
-        mainPanel.setPrefSize(400, 365);
-        outgoingBox.prefWidthProperty().bind(mainPanel.widthProperty());
-        outgoingBox.prefHeightProperty().bind(mainPanel.heightProperty().subtract(30));
-
-        logoView.setFitWidth(mainPanel.getPrefWidth() - 20);
-        logoView.setFitHeight(mainPanel.getPrefHeight() - componentHeightTotal);
-
-        targetIDCombo.prefWidthProperty().bind(outgoingBox.widthProperty().subtract(105));
-        System.out.println(lblTargetID.getWidth());
-
-        stage.hide();
 
         logoView.setImage(ico_up);
         localIDLabel.setText(String.format("This device's ID is %s", "127.0.0.1"));

@@ -1,0 +1,1 @@
+p2psession object holds all the information (about the p2p session what a concept) same as servermanager or clientmanager
