@@ -1,0 +1,2 @@
+# Objective
+Socket Rocket (Srocket) is a free, open-source communication solution written in Java, so it can run anywhere Oracle sees fit (something something 3 billion devices and etc.). This program provides a hopefully simple mechanism for taping two devices together on a network using the stupendous technology of Java-abstracted TCP/IP network sockets, and then allowing the devices to send messages and data (files of all sorts, to the best of my understanding) with speed reminiscent of some sort of high powered aerospatial vehicle.
