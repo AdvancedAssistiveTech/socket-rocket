@@ -1,4 +1,4 @@
-package core.gui_elements;
+package auxiliary.gui_elements;
 
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
