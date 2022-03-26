@@ -68,6 +68,10 @@ public class ConnectionBroker extends GenericScreen implements Closeable {
     public ConnectionBroker(String address) { // connection is coming from this device
         this();
 
+        //TODO: await acceptance from other machine
+        //Socket brokerSocket = new Socket(address, 2000); // put try catch
+        //ChatSocketManager brokerManager = new ChatSocketManager(brokerSocket);
+
         tasks[0].setTaskRunnable(() -> {
             try {
                 heartbeatSocket = new Socket(address, 2000); // create new socket on same port to separate heartbeat pings and text messages

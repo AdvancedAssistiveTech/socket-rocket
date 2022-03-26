@@ -1,5 +1,6 @@
 package core.controllers;
 
+import auxiliary.gui_elements.IncomingConnection;
 import core.screens.ConnectionBroker;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -38,6 +39,10 @@ public class DashboardController extends GenericController {
 
     public void brokerIncomingConnection(Socket incomingConnection, ServerSocket binder){
         Platform.runLater(() -> changeStage(new ConnectionBroker(incomingConnection, binder).getController().getCurrentStage()));
+    }
+
+    public void addIncoming(Socket incomingConnection, ServerSocket binder){
+        Platform.runLater(() -> incomingBox.getChildren().add(new IncomingConnection(incomingConnection, binder, this).getRoot()));
     }
 
     @Override
