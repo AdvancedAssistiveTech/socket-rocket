@@ -1,6 +1,5 @@
 package util.sockets;
 
-import util.Message;
 import util.enums.Tags;
 
 import java.io.IOException;
@@ -12,6 +11,7 @@ public class ChatSocketManager extends SocketManager{
         System.out.printf("Chat connected to %s%n", socket.getRemoteSocketAddress());
     }
 
+    /*
     public Message receiveMessage() throws IOException {
         String utf = inputStream.readUTF();
         //process tags etc. from message
@@ -26,6 +26,8 @@ public class ChatSocketManager extends SocketManager{
         );
         return toReturn;
     }
+
+     */
 
     public void send(Tags tag, Object... args){
         StringBuilder toSend;

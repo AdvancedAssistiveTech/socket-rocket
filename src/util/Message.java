@@ -6,9 +6,15 @@ public class Message{
     String[] contents;
     Tags tag;
 
-    public Message(String contents, Tags tag) {
-        this.contents = tag == Tags.TEXT ? new String[]{contents} : contents.split(","); // prevent splitting of plaintext messages
+    public Message(Tags tag, String... contents) {
+        this.contents = contents;
         this.tag = tag;
+    }
+
+    public Message(String toParse){
+        tag = Tags.fromChar(toParse.charAt(1));
+        toParse = toParse.substring(2);
+        contents = tag == Tags.TEXT ? new String[]{toParse} : toParse.split(","); //don't split by comma on plaintext
     }
 
     public String getContents(int index) {
@@ -21,5 +27,16 @@ public class Message{
 
     public Tags getTag() {
         return tag;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder stringExpr = new StringBuilder();
+        stringExpr.append("\\").append(tag.getValue());
+        for(String index : contents){
+            stringExpr.append(", ").append(index);
+        }
+        stringExpr.setLength(stringExpr.length() - 1); //truncate trailing comma
+        return stringExpr.toString();
     }
 }

@@ -40,6 +40,7 @@ public class PrefaceHandler {
         }
     }
 
+    /*
     static Message processReceived(String utf){
         if(!utf.startsWith("\\")){
             System.err.printf("Unknown string: %s (Not prefaced with \\)%n", utf);
@@ -52,4 +53,6 @@ public class PrefaceHandler {
         );
         return toReturn;
     }
+
+     */
 }

@@ -1,5 +1,6 @@
 package core.screens;
 
+import auxiliary.socket_managers.BrokerSocketManager;
 import auxiliary.socket_managers.ChatSocketManager;
 import auxiliary.socket_managers.HeartbeatSocketManager;
 import core.controllers.BrokerController;
@@ -9,11 +10,10 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.concurrent.CountDownLatch;
 
 public class ConnectionBroker extends GenericScreen implements Closeable {
-    private BrokerController controller = null;
-    private ServerSocket chatInitiator;
+    private final BrokerController controller;
+    private ServerSocket binder = null;
     private Socket heartbeatSocket, chatSocket;
     private HeartbeatSocketManager heartbeatManager;
     private ChatSocketManager chatManager;
@@ -23,6 +23,10 @@ public class ConnectionBroker extends GenericScreen implements Closeable {
     public void close() throws IOException {
         heartbeatSocket.close();
         chatSocket.close();
+
+        if(binder != null){
+            binder.close();
+        }
     }
 
     private class CreateTask {
@@ -68,24 +72,39 @@ public class ConnectionBroker extends GenericScreen implements Closeable {
     public ConnectionBroker(String address) { // connection is coming from this device
         this();
 
-        //TODO: await acceptance from other machine
-        //Socket brokerSocket = new Socket(address, 2000); // put try catch
-        //ChatSocketManager brokerManager = new ChatSocketManager(brokerSocket);
-
         tasks[0].setTaskRunnable(() -> {
+            //await acceptance from other machine
+            Socket brokerSocket;
             try {
-                heartbeatSocket = new Socket(address, 2000); // create new socket on same port to separate heartbeat pings and text messages
+                brokerSocket = new Socket(address, 2000); //send connect request to other device
+                if(new BrokerSocketManager(brokerSocket).awaitAccept()){
+                    brokerSocket.close();
+                }
+                else {
+                    CreateTask.executionFailed();
+                }
             } catch (IOException e) {
                 CreateTask.executionFailed();
                 e.printStackTrace();
             }
         });
 
-        tasks[2].setTaskRunnable(() -> { // make retries sleep this thread instead of primary application
+        tasks[1].setTaskRunnable(() -> {
+            try {
+                heartbeatSocket = new Socket(address, 2001); // create new socket on same port to separate heartbeat pings and text messages
+                System.out.println(heartbeatSocket);
+            } catch (IOException e) {
+                CreateTask.executionFailed();
+                e.printStackTrace();
+            }
+        });
+
+        tasks[3].setTaskRunnable(() -> {
             int retry = 0;
             while (retry < 5){
                 try {
-                    chatSocket = new Socket(address, 2000); // create new socket on same port to separate heartbeat pings and text messages
+                    chatSocket = new Socket(address, 2001); // create new socket on same port to separate heartbeat pings and text messages
+                    System.out.println(chatSocket);
                     break;
                 } catch (IOException e) {
                     retry++;
@@ -103,41 +122,58 @@ public class ConnectionBroker extends GenericScreen implements Closeable {
             }
         });
 
-        for(CreateTask task : tasks){
-            task.execute();
-        }
+
+        new Thread(() -> {
+            for(CreateTask task : tasks){
+                task.execute();
+            }
+        }).start();
     }
 
-    public ConnectionBroker(Socket incomingSocket, ServerSocket binder){ // connection is coming to this device
+    public ConnectionBroker(Socket incomingSocket){ // connection is coming to this device
         this();
+        try {
+            binder = new ServerSocket(2001);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         Platform.runLater(() -> stage.setTitle("server socket here"));
 
         tasks[0].setTaskRunnable(() -> {
-            heartbeatSocket = incomingSocket;
-        });
-
-        tasks[2].setTaskRunnable(() -> {
-            CountDownLatch latch = new CountDownLatch(1);
-            new Thread(() -> {
-                try {
-                    chatSocket = binder.accept();
-                } catch (IOException e) {
-                    CreateTask.executionFailed();
-                    e.printStackTrace();
-                }
-                latch.countDown();
-            }).start();
+            new BrokerSocketManager(incomingSocket).sendAccept();
             try {
-                latch.await();
-            } catch (InterruptedException e) {
+                incomingSocket.close();
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         });
 
-        for(CreateTask task : tasks){
-            task.execute();
-        }
+        tasks[1].setTaskRunnable(() -> {
+            try {
+                heartbeatSocket = binder.accept();
+                System.out.println(heartbeatSocket);
+            } catch (IOException e) {
+                CreateTask.executionFailed();
+                e.printStackTrace();
+            }
+        });
+
+        tasks[3].setTaskRunnable(() -> { //previously threaded
+            try {
+                chatSocket = binder.accept();
+                System.out.println(chatSocket);
+            } catch (IOException e) {
+                CreateTask.executionFailed();
+                e.printStackTrace();
+            }
+        });
+
+        new Thread(() -> {
+            for(CreateTask task : tasks){
+                task.execute();
+            }
+        }).start();
     }
 
     private ConnectionBroker(){
@@ -146,8 +182,12 @@ public class ConnectionBroker extends GenericScreen implements Closeable {
         controller = ((BrokerController) super.controller);
 
         tasks = new CreateTask[]{
+                new CreateTask("brokered connection"),
                 new CreateTask("heartbeat socket object"),
-                new CreateTask("heartbeat manager", () -> heartbeatManager = new HeartbeatSocketManager(heartbeatSocket)),
+                new CreateTask("heartbeat manager", () -> {
+                    heartbeatManager = new HeartbeatSocketManager(heartbeatSocket);
+                    heartbeatManager.setCurrentController(controller);
+                }),
                 new CreateTask("chat connection object"),
                 new CreateTask("chat manager", () -> chatManager = new ChatSocketManager(chatSocket))
         };

@@ -4,7 +4,6 @@ import core.Controller;
 import javafx.application.Platform;
 import org.jetbrains.annotations.NotNull;
 import util.DownloadableFile;
-import util.Message;
 import util.enums.Tags;
 import util.sockets.ChatSocketManager;
 import util.sockets.TransferSocketManager;
@@ -38,7 +37,7 @@ public class ServerManager {
             }
 
             Platform.runLater(() -> FXController.getStage().setTitle("Connected"));
-
+            /*
             while (true){ // message listening thread
                 Message message = null;
                 try {
@@ -63,6 +62,8 @@ public class ServerManager {
                     }
                 }
             }
+
+             */
         }).start();
 
         this.FXController = FXController;

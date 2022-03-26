@@ -29,9 +29,12 @@ public class SocketManager {
         downloadInfo = null;
     }
 
+    /*
     public Message receiveMessage() throws IOException {
         return PrefaceHandler.processReceived(inputStream.readUTF());
     }
+
+     */
 
     public TransferManager sendFile(File target){
         try {

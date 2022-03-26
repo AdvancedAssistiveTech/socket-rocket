@@ -2,6 +2,7 @@ package core.controllers;
 
 import auxiliary.gui_elements.IncomingConnection;
 import core.screens.ConnectionBroker;
+import core.screens.GenericScreen;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -12,7 +13,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-import java.net.ServerSocket;
 import java.net.Socket;
 
 public class DashboardController extends GenericController {
@@ -37,17 +37,17 @@ public class DashboardController extends GenericController {
         connectBtn.setText(String.format("Connect to %s", text));
     }
 
-    public void brokerIncomingConnection(Socket incomingConnection, ServerSocket binder){
-        Platform.runLater(() -> changeStage(new ConnectionBroker(incomingConnection, binder).getController().getCurrentStage()));
+    public void brokerIncomingConnection(Socket incomingConnection){
+        Platform.runLater(() -> changeStage(new ConnectionBroker(incomingConnection).getController().getCurrentStage()));
     }
 
-    public void addIncoming(Socket incomingConnection, ServerSocket binder){
-        Platform.runLater(() -> incomingBox.getChildren().add(new IncomingConnection(incomingConnection, binder, this).getRoot()));
+    public void addIncoming(Socket incomingConnection){
+        Platform.runLater(() -> incomingBox.getChildren().add(new IncomingConnection(incomingConnection, this).getRoot()));
     }
 
     @Override
-    public void setup(Stage stage){
-        super.setup(stage);
+    public void setup(Stage stage, GenericScreen controlledScreen){
+        super.setup(stage, controlledScreen);
         stage.setResizable(false);
 
         logoView.setImage(ico_up);
@@ -65,7 +65,6 @@ public class DashboardController extends GenericController {
         targetIDCombo.getItems().add("localhost");
 
         connectBtn.setOnAction(actionEvent -> {
-            System.out.println("button interact");
             changeStage(new ConnectionBroker(targetIDCombo.getValue()).getController().getCurrentStage());
         });
 

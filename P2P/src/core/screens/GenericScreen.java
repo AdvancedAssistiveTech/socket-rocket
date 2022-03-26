@@ -18,7 +18,7 @@ public abstract class GenericScreen extends GenericGUIElement {
 
         stage.setScene(scene);
         controller = loader.getController();
-        controller.setup(stage);
+        controller.setup(stage, this);
         beforeLaunch();
         stage.show();
     }

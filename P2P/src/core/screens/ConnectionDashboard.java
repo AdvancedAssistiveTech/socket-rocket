@@ -8,30 +8,35 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ConnectionDashboard extends GenericScreen {
+    public AtomicBoolean acceptingCandidates;
+    private ServerSocket serverSocket;
     public ConnectionDashboard() {
         super(GenericScreen.class.getResource("/ConnectionDashboardXML.fxml"));
 
+        acceptingCandidates = new AtomicBoolean(true);
         DashboardController controller = ((DashboardController) super.controller);
 
         try {
-            ServerSocket serverSocket = new ServerSocket(2000);
+            serverSocket = new ServerSocket(2000);
             System.out.printf("Address: %s%nPort: %s%n", serverSocket.getInetAddress(), serverSocket.getLocalPort());
             new Thread(() -> {
                 List<Socket> socketCandidates = new ArrayList<>();
                 // update stage to broker object to reflect incoming connection TODO: make this only happen after connection is accepted by user in menu
-                while (true){
+                while (acceptingCandidates.get()){
                     Socket newCandidate;
                     try{
                         newCandidate = serverSocket.accept();
                         socketCandidates.add(newCandidate); //add all incoming connections to candidate list
-                        controller.addIncoming(newCandidate, serverSocket);
+                        controller.addIncoming(newCandidate);
                     }
                     catch (IOException e){
                         e.printStackTrace();
                     }
                 }
+                closeServerSocket();
             }).start();
         } catch (IOException e) {
             if(e instanceof BindException){
@@ -39,6 +44,14 @@ public class ConnectionDashboard extends GenericScreen {
                 //System.exit(1);
                 controller.setTitle("bindError");
             }
+        }
+    }
+
+    public void closeServerSocket(){
+        try {
+            serverSocket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

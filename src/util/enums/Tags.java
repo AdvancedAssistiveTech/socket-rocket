@@ -2,6 +2,7 @@ package util.enums;
 
 public enum Tags {
     // grouped first by argsCount and then alphabetically
+    BROKER('b', 0, "broker accept"),
     INSTRUCTION('i', 1, "instruction"),
     TEXT('t', 1, "plaintext"),
     DOWNLOAD_REQUEST('r', 2, "download request"),

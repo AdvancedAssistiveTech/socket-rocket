@@ -1,16 +1,19 @@
 package core.controllers;
 
+import core.screens.GenericScreen;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
 public abstract class GenericController {
     protected Stage currentStage;
+    protected GenericScreen controlledScreen;
 
-    public static final javafx.scene.image.Image ico_up = new Image(GenericController.class.getResourceAsStream("/ico_up.jpg"));
+    public static final Image ico_up = new Image(GenericController.class.getResourceAsStream("/ico_up.jpg"));
 
-    public void setup(Stage currentStage){
+    public void setup(Stage currentStage, GenericScreen controlledScreen){
         this.currentStage = currentStage;
+        this.controlledScreen = controlledScreen;
         currentStage.getIcons().add(ico_up);
 
         currentStage.getScene().getWindow().addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, windowEvent -> {
@@ -19,7 +22,7 @@ public abstract class GenericController {
         });
     }
 
-    protected void changeStage(Stage incomingStage){
+    public void changeStage(Stage incomingStage){
         currentStage.close();
         incomingStage.show();
     }
@@ -30,5 +33,8 @@ public abstract class GenericController {
 
     public Stage getCurrentStage() {
         return currentStage;
+    }
+    public GenericScreen getControlledScreen(){
+        return controlledScreen;
     }
 }

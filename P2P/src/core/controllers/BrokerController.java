@@ -1,6 +1,7 @@
 package core.controllers;
 
-import core.screens.ConnectionDashboard;
+import core.screens.ConnectionBroker;
+import core.screens.GenericScreen;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -8,6 +9,8 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
+
+import java.io.IOException;
 
 public class BrokerController extends GenericController {
     @FXML
@@ -29,10 +32,6 @@ public class BrokerController extends GenericController {
         catch (IllegalStateException stateException){
             Platform.runLater(() -> logFlow.getChildren().add(candidateText));
         }
-    }
-
-    public void logMessage(Text text){
-        logFlow.getChildren().add(text);
     }
 
     public void increaseProgress() {
@@ -61,15 +60,20 @@ public class BrokerController extends GenericController {
     }
 
     @Override
-    public void setup(Stage currentStage) {
-        super.setup(currentStage);
+    public void setup(Stage currentStage, GenericScreen controlledScreen) {
+        super.setup(currentStage, controlledScreen);
 
         currentStage.setResizable(false);
 
         progressBar.prefWidthProperty().bind(logFlow.widthProperty());
 
         btnCancel.setOnAction(actionEvent -> {
-            changeStage(new ConnectionDashboard().getController().getCurrentStage());
+            try {
+                ((ConnectionBroker) getControlledScreen()).close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            System.out.println("cancel interact");
         });
     }
 }

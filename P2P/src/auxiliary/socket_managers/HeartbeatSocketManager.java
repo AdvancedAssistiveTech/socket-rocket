@@ -1,9 +1,17 @@
 package auxiliary.socket_managers;
 
+import core.controllers.BrokerController;
+import core.controllers.GenericController;
+import core.screens.ConnectionBroker;
+import core.screens.ConnectionDashboard;
+import javafx.application.Platform;
+
 import java.io.IOException;
 import java.net.Socket;
 
 public class HeartbeatSocketManager extends GenericSocketManager {
+    private GenericController currentController;
+
     public HeartbeatSocketManager(Socket socket) {
         super(socket);
 
@@ -11,12 +19,29 @@ public class HeartbeatSocketManager extends GenericSocketManager {
         new Thread(() -> {
             while (true){
                 try{
+                    if(socket.isClosed()){ // check if socket has been closed since stream.read() isn't always reliable
+                        throw new IOException();
+                    }
                     inputStream.read();
                 } catch (IOException e) {
                     System.err.println("Socket disconnect");
-                    System.exit(1);
+                    Platform.runLater(() -> {
+                        currentController.changeStage(new ConnectionDashboard().getController().getCurrentStage());
+                    });
+                    if (currentController instanceof BrokerController){
+                        try {
+                            ((ConnectionBroker) currentController.getControlledScreen()).close();
+                        } catch (IOException ex) {
+                            ex.printStackTrace();
+                        }
+                    }
+                    break;
                 }
             }
         }).start();
+    }
+
+    public void setCurrentController(GenericController currentController) {
+        this.currentController = currentController;
     }
 }
