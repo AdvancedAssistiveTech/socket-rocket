@@ -21,6 +21,5 @@ class SocketManager {
             e.printStackTrace();
             System.exit(-1);
         }
-        //downloadInfo = null;
     }
 }

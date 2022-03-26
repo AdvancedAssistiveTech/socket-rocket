@@ -23,8 +23,6 @@ public class ServerManager {
         final ServerSocket init = new ServerSocket(port);
         this.port = init.getLocalPort();
 
-        //WlanClient client;
-
         FXController.setTitle(String.format("Open on p:%s add:%s", getPort(), init.getInetAddress()));
 
         new Thread(() -> {
