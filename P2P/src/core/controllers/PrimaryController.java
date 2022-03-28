@@ -6,33 +6,42 @@ import core.screens.GenericScreen;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.TextAlignment;
 
 public class PrimaryController extends GenericController {
     @FXML
-    private VBox holderPane;
+    private VBox holderPane, filesSideBox;
+    @FXML
+    private Button btnSend, btnUpload, btnDownload;
+    @FXML
+    private TextField txtMessage;
     @FXML
     private TableView<DownloadableFile> tblFiles;
     @FXML
-    private Button btnSend;
-    @FXML
-    private TextField txtMessage;
+    TableColumn<DownloadableFile, String> nameColumn, sizeColumn;
 
     @Override
     public void setup(GenericScreen controlledScreen, String title){
         super.setup(controlledScreen, title);
 
+        btnDownload.prefWidthProperty().bind(filesSideBox.widthProperty().divide(2));
+        btnUpload.prefWidthProperty().bind(btnDownload.widthProperty());
+
+        nameColumn.minWidthProperty().bind(tblFiles.widthProperty().divide(2));
+        sizeColumn.minWidthProperty().bind(nameColumn.widthProperty());
+
         btnSend.setOnAction(actionEvent -> {
-            String messageText = txtMessage.getText();
-            ((ConnectedPrimary) controlledScreen).sendTextMessage(messageText);
-            addMessage(messageText, true);
-            txtMessage.clear();
+            clickSend();
+        });
+
+        txtMessage.setOnKeyReleased(keyEvent -> {
+            if (keyEvent.getCode() == KeyCode.ENTER) {
+                clickSend();
+            }
         });
     }
 
@@ -60,5 +69,12 @@ public class PrimaryController extends GenericController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void clickSend(){
+        String messageText = txtMessage.getText();
+        ((ConnectedPrimary) controlledScreen).sendTextMessage(messageText);
+        addMessage(messageText, true);
+        txtMessage.clear();
     }
 }

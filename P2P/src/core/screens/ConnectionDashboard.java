@@ -47,7 +47,7 @@ public class ConnectionDashboard extends GenericScreen {
             if(e instanceof BindException){
                 System.err.println("Error while trying to open socket 2000 on local address. Is the application open somewhere else?");
                 //System.exit(1);
-                controller.setTitle("bindError");
+                setTitle("bindError");
             }
         }
     }
@@ -58,5 +58,11 @@ public class ConnectionDashboard extends GenericScreen {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void beforeLaunch(String title) {
+        super.beforeLaunch(title);
+        setResizable(false);
     }
 }

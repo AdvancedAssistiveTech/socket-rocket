@@ -7,27 +7,11 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
 public abstract class GenericController {
-    protected Stage currentStage;
     protected GenericScreen controlledScreen;
-
-    public static final Image ico_up = new Image(GenericController.class.getResourceAsStream("/ico_up.jpg"));
 
     public void setup(GenericScreen controlledScreen, String title) {
         this.controlledScreen = controlledScreen;
-        currentStage = App.stage;
-        currentStage.getIcons().add(ico_up);
-
-        currentStage.setTitle(title);
-
-        controlledScreen.beforeLaunch();
-        currentStage.getScene().getWindow().addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, windowEvent -> {
-            // handle window close with an exit() call to terminate the message listening thread as well
-            System.exit(0);
-        });
-    }
-
-    public void setTitle(String title){
-        currentStage.setTitle(title);
+        controlledScreen.beforeLaunch(title);
     }
 
     public GenericScreen getControlledScreen(){

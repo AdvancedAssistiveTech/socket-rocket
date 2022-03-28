@@ -143,7 +143,7 @@ public class ConnectionBroker extends GenericScreen implements Closeable {
             e.printStackTrace();
         }
 
-        controller.setTitle("server socket here");
+        setTitle("server socket here");
 
         tasks[0].setTaskRunnable(() -> {
             new BrokerSocketManager(incomingSocket).sendAccept();
@@ -213,5 +213,11 @@ public class ConnectionBroker extends GenericScreen implements Closeable {
         };
 
         controller.setSteps(tasks.length);
+    }
+
+    @Override
+    public void beforeLaunch(String title) {
+        super.beforeLaunch(title);
+        setResizable(false);
     }
 }

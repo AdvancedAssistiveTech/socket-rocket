@@ -62,8 +62,6 @@ public class BrokerController extends GenericController {
     public void setup(GenericScreen controlledScreen, String title){
         super.setup(controlledScreen, title);
 
-        currentStage.setResizable(false);
-
         progressBar.prefWidthProperty().bind(logFlow.widthProperty());
 
         btnCancel.setOnAction(actionEvent -> {

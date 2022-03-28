@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.control.Accordion?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ScrollPane?>
@@ -15,14 +18,13 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<TabPane fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="core.controllers.PrimaryController">
+<TabPane fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="core.controllers.PrimaryController">
   <tabs>
     <Tab fx:id="tabChat" closable="false" text="Chat">
          <content>
             <GridPane>
               <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="75.0" />
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="25.0" />
+                <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" percentWidth="100.0" />
               </columnConstraints>
               <rowConstraints>
                 <RowConstraints minHeight="10.0" prefHeight="300.0" vgrow="ALWAYS" />
@@ -45,24 +47,31 @@
          <content>
             <GridPane fx:id="filesGrid">
               <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="75.0" prefWidth="100.0" />
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="25.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="67.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="17.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="17.0" prefWidth="100.0" />
               </columnConstraints>
               <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints prefHeight="329.0" vgrow="ALWAYS" />
+                  <RowConstraints maxHeight="31.0" minHeight="-Infinity" prefHeight="31.0" vgrow="NEVER" />
               </rowConstraints>
                <children>
-                  <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" prefHeight="200.0" prefWidth="450.0">
+                  <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" prefHeight="200.0" prefWidth="450.0" GridPane.hgrow="ALWAYS" GridPane.rowSpan="2" GridPane.vgrow="ALWAYS">
                      <content>
-                        <TableView fx:id="tblFiles" prefHeight="360.0" prefWidth="600.0">
+                        <TableView fx:id="tblFiles">
                            <columns>
-                              <TableColumn fx:id="nameColumn" editable="false" minWidth="75.0" prefWidth="224.0" text="Name" />
-                              <TableColumn fx:id="sizeColumn" editable="false" minWidth="75.0" prefWidth="224.0" text="Size" />
+                              <TableColumn fx:id="nameColumn" editable="false" maxWidth="-1.0" minWidth="200.0" prefWidth="200.0" text="Name" />
+                              <TableColumn fx:id="sizeColumn" editable="false" maxWidth="-1.0" minWidth="200.0" prefWidth="-1.0" text="Size" />
                            </columns>
+                           <columnResizePolicy>
+                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                           </columnResizePolicy>
                         </TableView>
                      </content>
                   </ScrollPane>
-                  <VBox fx:id="filesSideBox" prefHeight="200.0" prefWidth="100.0" style="-fx-border-color: grey;" GridPane.columnIndex="1" />
+                  <VBox fx:id="filesSideBox" prefHeight="200.0" prefWidth="100.0" style="-fx-border-color: grey;" GridPane.columnIndex="1" GridPane.columnSpan="2" />
+                  <Button fx:id="btnUpload" alignment="CENTER" mnemonicParsing="false" text="Upload" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
+                  <Button fx:id="btnDownload" mnemonicParsing="false" text="Download" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
                </children>
             </GridPane>
          </content>

@@ -37,7 +37,6 @@ public class Message {
             stringExpr.append(",").append(index);
         }
         stringExpr.setLength(stringExpr.length()); //truncate trailing comma
-        System.out.println("builder string: " + stringExpr.toString());
         return stringExpr.toString();
     }
 }

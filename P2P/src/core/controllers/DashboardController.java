@@ -42,9 +42,8 @@ public class DashboardController extends GenericController {
     @Override
     public void setup(GenericScreen controlledScreen, String title){
         super.setup(controlledScreen, title);
-        currentStage.setResizable(false);
 
-        logoView.setImage(ico_up);
+        logoView.setImage(GenericScreen.ico_up);
         localIDLabel.setText(String.format("This device's ID is %s", "127.0.0.1"));
 
         targetIDCombo.setOnKeyReleased(keyEvent -> {
