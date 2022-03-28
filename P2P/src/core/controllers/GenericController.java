@@ -24,16 +24,16 @@ public abstract class GenericController {
         });
     }
 
-    public void changeStage(Stage incomingStage){
+    public void changeScreen(GenericScreen screen){
         currentStage.close();
-        incomingStage.show();
+        screen.getController().getCurrentStage().show();
     }
 
     public void setTitle(String title){
         currentStage.setTitle(title);
     }
 
-    public Stage getCurrentStage() {
+    protected Stage getCurrentStage() { //limit stage object access to other controller objects
         return currentStage;
     }
     public GenericScreen getControlledScreen(){

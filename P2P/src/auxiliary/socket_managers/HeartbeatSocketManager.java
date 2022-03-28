@@ -32,7 +32,7 @@ public class HeartbeatSocketManager extends GenericSocketManager {
                             ex.printStackTrace();
                         }
                     }
-                    Platform.runLater(() -> currentController.changeStage(new ConnectionDashboard().getController().getCurrentStage()));
+                    Platform.runLater(() -> currentController.changeScreen(new ConnectionDashboard()));
                     break;
                 }
             }

@@ -38,7 +38,7 @@ public class DashboardController extends GenericController {
     }
 
     public void brokerIncomingConnection(Socket incomingConnection){
-        Platform.runLater(() -> changeStage(new ConnectionBroker(incomingConnection).getController().getCurrentStage()));
+        Platform.runLater(() -> changeScreen(new ConnectionBroker(incomingConnection)));
     }
 
     public void addIncoming(Socket incomingConnection){
@@ -64,6 +64,6 @@ public class DashboardController extends GenericController {
 
         targetIDCombo.getItems().add("localhost");
 
-        connectBtn.setOnAction(actionEvent -> changeStage(new ConnectionBroker(targetIDCombo.getValue()).getController().getCurrentStage()));
+        connectBtn.setOnAction(actionEvent -> changeScreen(new ConnectionBroker(targetIDCombo.getValue())));
     }
 }
