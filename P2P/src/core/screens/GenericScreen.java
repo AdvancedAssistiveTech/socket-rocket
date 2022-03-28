@@ -12,13 +12,13 @@ public abstract class GenericScreen extends GenericGUIElement {
 
     public void beforeLaunch(){}
 
-    public GenericScreen(URL fxmlResource){
+    public GenericScreen(URL fxmlResource, String title){
         super(fxmlResource);
         this.stage = new Stage();
 
         stage.setScene(scene);
         controller = loader.getController();
-        controller.setup(stage, this);
+        controller.setup(stage, this, title);
         beforeLaunch();
         stage.show();
     }

@@ -177,7 +177,7 @@ public class ConnectionBroker extends GenericScreen implements Closeable {
     }
 
     private ConnectionBroker(){
-        super(GenericScreen.class.getResource("/ConnectionBrokerXML.fxml"));
+        super(GenericScreen.class.getResource("/ConnectionBrokerXML.fxml"), "sRocket Connection Broker");
 
         controller = ((BrokerController) super.controller);
 

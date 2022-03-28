@@ -46,8 +46,8 @@ public class DashboardController extends GenericController {
     }
 
     @Override
-    public void setup(Stage stage, GenericScreen controlledScreen){
-        super.setup(stage, controlledScreen);
+    public void setup(Stage stage, GenericScreen controlledScreen, String title){
+        super.setup(stage, controlledScreen, title);
         stage.setResizable(false);
 
         logoView.setImage(ico_up);
@@ -64,10 +64,6 @@ public class DashboardController extends GenericController {
 
         targetIDCombo.getItems().add("localhost");
 
-        connectBtn.setOnAction(actionEvent -> {
-            changeStage(new ConnectionBroker(targetIDCombo.getValue()).getController().getCurrentStage());
-        });
-
-        stage.setTitle("Srocket Connection Dashboard");
+        connectBtn.setOnAction(actionEvent -> changeStage(new ConnectionBroker(targetIDCombo.getValue()).getController().getCurrentStage()));
     }
 }

@@ -60,8 +60,8 @@ public class BrokerController extends GenericController {
     }
 
     @Override
-    public void setup(Stage currentStage, GenericScreen controlledScreen) {
-        super.setup(currentStage, controlledScreen);
+    public void setup(Stage currentStage, GenericScreen controlledScreen, String title) {
+        super.setup(currentStage, controlledScreen, title);
 
         currentStage.setResizable(false);
 

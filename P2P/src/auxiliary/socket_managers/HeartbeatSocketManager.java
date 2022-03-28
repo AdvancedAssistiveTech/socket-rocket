@@ -25,9 +25,6 @@ public class HeartbeatSocketManager extends GenericSocketManager {
                     inputStream.read();
                 } catch (IOException e) {
                     System.err.println("Socket disconnect");
-                    Platform.runLater(() -> {
-                        currentController.changeStage(new ConnectionDashboard().getController().getCurrentStage());
-                    });
                     if (currentController instanceof BrokerController){
                         try {
                             ((ConnectionBroker) currentController.getControlledScreen()).close();
@@ -35,6 +32,7 @@ public class HeartbeatSocketManager extends GenericSocketManager {
                             ex.printStackTrace();
                         }
                     }
+                    Platform.runLater(() -> currentController.changeStage(new ConnectionDashboard().getController().getCurrentStage()));
                     break;
                 }
             }

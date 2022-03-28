@@ -14,7 +14,7 @@ public class ConnectionDashboard extends GenericScreen {
     public AtomicBoolean acceptingCandidates;
     private ServerSocket serverSocket;
     public ConnectionDashboard() {
-        super(GenericScreen.class.getResource("/ConnectionDashboardXML.fxml"));
+        super(GenericScreen.class.getResource("/ConnectionDashboardXML.fxml"), "Srocket Connection Dashboard");
 
         acceptingCandidates = new AtomicBoolean(true);
         DashboardController controller = ((DashboardController) super.controller);
@@ -23,6 +23,11 @@ public class ConnectionDashboard extends GenericScreen {
             serverSocket = new ServerSocket(2000);
             System.out.printf("Address: %s%nPort: %s%n", serverSocket.getInetAddress(), serverSocket.getLocalPort());
             new Thread(() -> {
+                /*
+                TODO: add multiple incoming connections
+                this list should be used to track all the incoming connections and provide the appropriate socket object
+                when the user selects a given connection
+                 */
                 List<Socket> socketCandidates = new ArrayList<>();
                 // update stage to broker object to reflect incoming connection TODO: make this only happen after connection is accepted by user in menu
                 while (acceptingCandidates.get()){
