@@ -4,8 +4,4 @@ module Client {
     requires java.desktop;
 
     requires Rocket;
-
-    opens core to javafx.graphics, javafx.fxml;
-
-    exports core;
 }

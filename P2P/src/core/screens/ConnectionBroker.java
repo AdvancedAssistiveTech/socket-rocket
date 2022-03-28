@@ -10,17 +10,22 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ConnectionBroker extends GenericScreen implements Closeable {
     private final BrokerController controller;
+    private final CreateTask[] tasks;
+    private final AtomicBoolean brokerageInProgress;
+
     private ServerSocket binder = null;
     private Socket heartbeatSocket, chatSocket;
     private HeartbeatSocketManager heartbeatManager;
     private ChatSocketManager chatManager;
-    private final CreateTask[] tasks;
 
     @Override
     public void close() throws IOException {
+        brokerageInProgress.set(false);
+
         heartbeatSocket.close();
         chatSocket.close();
 
@@ -138,7 +143,7 @@ public class ConnectionBroker extends GenericScreen implements Closeable {
             e.printStackTrace();
         }
 
-        Platform.runLater(() -> stage.setTitle("server socket here"));
+        controller.setTitle("server socket here");
 
         tasks[0].setTaskRunnable(() -> {
             new BrokerSocketManager(incomingSocket).sendAccept();
@@ -152,7 +157,6 @@ public class ConnectionBroker extends GenericScreen implements Closeable {
         tasks[1].setTaskRunnable(() -> {
             try {
                 heartbeatSocket = binder.accept();
-                System.out.println(heartbeatSocket);
             } catch (IOException e) {
                 CreateTask.executionFailed();
                 e.printStackTrace();
@@ -162,7 +166,6 @@ public class ConnectionBroker extends GenericScreen implements Closeable {
         tasks[3].setTaskRunnable(() -> { //previously threaded
             try {
                 chatSocket = binder.accept();
-                System.out.println(chatSocket);
             } catch (IOException e) {
                 CreateTask.executionFailed();
                 e.printStackTrace();
@@ -180,16 +183,33 @@ public class ConnectionBroker extends GenericScreen implements Closeable {
         super(GenericScreen.class.getResource("/ConnectionBrokerXML.fxml"), "sRocket Connection Broker");
 
         controller = ((BrokerController) super.controller);
+        brokerageInProgress = new AtomicBoolean(true);
 
         tasks = new CreateTask[]{
                 new CreateTask("brokered connection"),
                 new CreateTask("heartbeat socket object"),
                 new CreateTask("heartbeat manager", () -> {
                     heartbeatManager = new HeartbeatSocketManager(heartbeatSocket);
-                    heartbeatManager.setCurrentController(controller);
+                    new Thread(() -> {
+                        while (brokerageInProgress.get()){
+                            if(!heartbeatManager.isConnected()){
+                                System.err.println("No response from heartbeat socket. Terminating connection");
+                                try {
+                                    close(); // close() updates brokerageInProgress so that loop will end
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                                new ConnectionDashboard();
+                            }
+                        }
+                    }).start();
                 }),
                 new CreateTask("chat connection object"),
-                new CreateTask("chat manager", () -> chatManager = new ChatSocketManager(chatSocket))
+                new CreateTask("chat manager", () -> {
+                    chatManager = new ChatSocketManager(chatSocket);
+                    brokerageInProgress.set(false);
+                    Platform.runLater(() -> new ConnectedPrimary(heartbeatManager, chatManager));
+                })
         };
 
         controller.setSteps(tasks.length);

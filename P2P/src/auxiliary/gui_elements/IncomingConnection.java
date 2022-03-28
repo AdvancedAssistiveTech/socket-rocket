@@ -1,6 +1,7 @@
 package auxiliary.gui_elements;
 
 import core.controllers.DashboardController;
+import core.screens.ConnectionBroker;
 import core.screens.ConnectionDashboard;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
@@ -23,7 +24,7 @@ public class IncomingConnection extends GenericGUIElement{
             ConnectionDashboard parentDashboard = (ConnectionDashboard) dashboardController.getControlledScreen();
             parentDashboard.acceptingCandidates.set(false);
             parentDashboard.closeServerSocket();
-            dashboardController.brokerIncomingConnection(incomingSocket);
+            new ConnectionBroker(incomingSocket);
         });
         rejectButton.setOnAction(actionEvent -> ((VBox) root.getParent()).getChildren().remove(root));
     }

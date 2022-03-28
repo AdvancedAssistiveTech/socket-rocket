@@ -11,7 +11,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TabPane;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 
 import java.net.Socket;
 
@@ -37,18 +36,13 @@ public class DashboardController extends GenericController {
         connectBtn.setText(String.format("Connect to %s", text));
     }
 
-    public void brokerIncomingConnection(Socket incomingConnection){
-        Platform.runLater(() -> changeScreen(new ConnectionBroker(incomingConnection)));
-    }
-
     public void addIncoming(Socket incomingConnection){
         Platform.runLater(() -> incomingBox.getChildren().add(new IncomingConnection(incomingConnection, this).getRoot()));
     }
-
     @Override
-    public void setup(Stage stage, GenericScreen controlledScreen, String title){
-        super.setup(stage, controlledScreen, title);
-        stage.setResizable(false);
+    public void setup(GenericScreen controlledScreen, String title){
+        super.setup(controlledScreen, title);
+        currentStage.setResizable(false);
 
         logoView.setImage(ico_up);
         localIDLabel.setText(String.format("This device's ID is %s", "127.0.0.1"));
@@ -64,6 +58,6 @@ public class DashboardController extends GenericController {
 
         targetIDCombo.getItems().add("localhost");
 
-        connectBtn.setOnAction(actionEvent -> changeScreen(new ConnectionBroker(targetIDCombo.getValue())));
+        connectBtn.setOnAction(actionEvent -> new ConnectionBroker(targetIDCombo.getValue()));
     }
 }

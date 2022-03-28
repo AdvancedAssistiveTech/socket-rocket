@@ -12,4 +12,8 @@ module P2P {
     opens core.controllers to javafx.fxml, javafx.graphics;
     exports core.screens;
     opens core.screens to javafx.fxml, javafx.graphics;
+
+    exports auxiliary.socket_managers;
+    exports auxiliary.data;
+    exports auxiliary.data.enums;
 }

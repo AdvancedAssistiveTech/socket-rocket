@@ -1,21 +1,17 @@
 package auxiliary.socket_managers;
 
-import core.controllers.BrokerController;
-import core.controllers.GenericController;
-import core.screens.ConnectionBroker;
-import core.screens.ConnectionDashboard;
-import javafx.application.Platform;
-
 import java.io.IOException;
 import java.net.Socket;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class HeartbeatSocketManager extends GenericSocketManager {
-    private GenericController currentController;
+    private final AtomicBoolean connected; //atomic boolean should be used to keep values consistent across threads
 
     public HeartbeatSocketManager(Socket socket) {
         super(socket);
 
         //ping connected device to ensure connection is up
+        connected = new AtomicBoolean(true);
         new Thread(() -> {
             while (true){
                 try{
@@ -24,22 +20,14 @@ public class HeartbeatSocketManager extends GenericSocketManager {
                     }
                     inputStream.read();
                 } catch (IOException e) {
-                    System.err.println("Socket disconnect");
-                    if (currentController instanceof BrokerController){
-                        try {
-                            ((ConnectionBroker) currentController.getControlledScreen()).close();
-                        } catch (IOException ex) {
-                            ex.printStackTrace();
-                        }
-                    }
-                    Platform.runLater(() -> currentController.changeScreen(new ConnectionDashboard()));
+                    connected.set(false);
                     break;
                 }
             }
         }).start();
     }
 
-    public void setCurrentController(GenericController currentController) {
-        this.currentController = currentController;
+    public boolean isConnected() {
+        return connected.get();
     }
 }

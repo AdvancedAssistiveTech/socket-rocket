@@ -1,7 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Accordion?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
 <TabPane fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="core.controllers.PrimaryController">
   <tabs>
     <Tab fx:id="tabChat" closable="false" text="Chat">
@@ -23,7 +36,7 @@
                      </content>
                   </ScrollPane>
                   <TextField fx:id="txtMessage" prefHeight="30.0" prefWidth="300.0" GridPane.rowIndex="1" GridPane.vgrow="NEVER" />
-                  <Button mnemonicParsing="false" prefHeight="30.0" text="Send" GridPane.rowIndex="2" GridPane.vgrow="NEVER" />
+                  <Button fx:id="btnSend" mnemonicParsing="false" prefHeight="30.0" text="Send" GridPane.rowIndex="2" GridPane.vgrow="NEVER" />
                </children>
             </GridPane>
          </content>

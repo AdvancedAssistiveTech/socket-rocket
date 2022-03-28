@@ -14,7 +14,7 @@ public class ConnectionDashboard extends GenericScreen {
     public AtomicBoolean acceptingCandidates;
     private ServerSocket serverSocket;
     public ConnectionDashboard() {
-        super(GenericScreen.class.getResource("/ConnectionDashboardXML.fxml"), "Srocket Connection Dashboard");
+        super(GenericScreen.class.getResource("/ConnectionDashboardXML.fxml"), "sRocket Connection Dashboard");
 
         acceptingCandidates = new AtomicBoolean(true);
         DashboardController controller = ((DashboardController) super.controller);

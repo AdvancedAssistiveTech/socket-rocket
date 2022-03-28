@@ -1,7 +1,7 @@
 package auxiliary.socket_managers;
 
-import util.Message;
-import util.enums.Tags;
+import auxiliary.data.Message;
+import auxiliary.data.enums.Tags;
 
 import java.io.IOException;
 import java.net.Socket;

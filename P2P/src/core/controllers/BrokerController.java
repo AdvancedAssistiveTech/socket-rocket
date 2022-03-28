@@ -8,7 +8,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 
@@ -60,8 +59,8 @@ public class BrokerController extends GenericController {
     }
 
     @Override
-    public void setup(Stage currentStage, GenericScreen controlledScreen, String title) {
-        super.setup(currentStage, controlledScreen, title);
+    public void setup(GenericScreen controlledScreen, String title){
+        super.setup(controlledScreen, title);
 
         currentStage.setResizable(false);
 

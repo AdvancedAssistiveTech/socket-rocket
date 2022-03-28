@@ -1,4 +1,4 @@
-package util;
+package auxiliary.data;
 
 import java.io.File;
 
@@ -6,6 +6,14 @@ public class DownloadableFile {
     private final String name;
     private final String path;
     private final long size;
+
+    public DownloadableFile(Message message) {
+        this(
+                message.getContents(0),
+                message.getContents(1),
+                Long.parseLong(message.getContents(2))
+        );
+    }
 
     public DownloadableFile(String name, String path, long size) { // for receiving serverside
         this.name = name;

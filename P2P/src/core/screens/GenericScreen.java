@@ -1,26 +1,27 @@
 package core.screens;
 
 import auxiliary.gui_elements.GenericGUIElement;
+import core.App;
 import core.controllers.GenericController;
-import javafx.stage.Stage;
+import javafx.application.Platform;
 
 import java.net.URL;
 
 public abstract class GenericScreen extends GenericGUIElement {
-    protected Stage stage;
     protected GenericController controller;
 
     public void beforeLaunch(){}
 
     public GenericScreen(URL fxmlResource, String title){
         super(fxmlResource);
-        this.stage = new Stage();
-
-        stage.setScene(scene);
         controller = loader.getController();
-        controller.setup(stage, this, title);
-        beforeLaunch();
-        stage.show();
+        try{
+            App.stage.setScene(scene);
+        }
+        catch (IllegalStateException stateException){
+            Platform.runLater(() -> App.stage.setScene(scene));
+        }
+        controller.setup(this, title);
     }
 
     public GenericController getController() {

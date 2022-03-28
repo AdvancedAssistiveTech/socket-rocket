@@ -1,8 +1,8 @@
-package util;
+package auxiliary.data;
 
-import util.enums.Tags;
+import auxiliary.data.enums.Tags;
 
-public class Message{
+public class Message {
     String[] contents;
     Tags tag;
 
@@ -13,7 +13,7 @@ public class Message{
 
     public Message(String toParse){
         tag = Tags.fromChar(toParse.charAt(1));
-        toParse = toParse.substring(2);
+        toParse = toParse.substring(3);
         contents = tag == Tags.TEXT ? new String[]{toParse} : toParse.split(","); //don't split by comma on plaintext
     }
 
@@ -34,9 +34,10 @@ public class Message{
         StringBuilder stringExpr = new StringBuilder();
         stringExpr.append("\\").append(tag.getValue());
         for(String index : contents){
-            stringExpr.append(", ").append(index);
+            stringExpr.append(",").append(index);
         }
-        stringExpr.setLength(stringExpr.length() - 1); //truncate trailing comma
+        stringExpr.setLength(stringExpr.length()); //truncate trailing comma
+        System.out.println("builder string: " + stringExpr.toString());
         return stringExpr.toString();
     }
 }

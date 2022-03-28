@@ -5,9 +5,4 @@ module Server {
 
     requires Rocket;
     requires org.jetbrains.annotations;
-
-    opens core to javafx.graphics, javafx.fxml;
-    opens auxiliary to javafx.base;
-
-    exports core;
 }

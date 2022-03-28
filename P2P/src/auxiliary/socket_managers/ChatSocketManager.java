@@ -1,7 +1,7 @@
 package auxiliary.socket_managers;
 
-import util.Message;
-import util.enums.Tags;
+import auxiliary.data.Message;
+import auxiliary.data.enums.Tags;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -26,7 +26,7 @@ public class ChatSocketManager extends GenericSocketManager {
         return toReturn;
     }
 
-    public void send(Tags tag, String... args){
+    public void sendMessage(Tags tag, String... args){
         Message toSend;
         if(args.length < tag.getRequiredArgsCount()){
             System.err.printf("Problem sending %s, required %s args, given %s. Send aborted", tag, tag.getRequiredArgsCount(), args.length);
