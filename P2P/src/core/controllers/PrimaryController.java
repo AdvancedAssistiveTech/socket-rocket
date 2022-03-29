@@ -1,16 +1,19 @@
 package core.controllers;
 
 import auxiliary.data.DownloadableFile;
+import auxiliary.data.enums.Tags;
 import core.screens.ConnectedPrimary;
 import core.screens.GenericScreen;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.TextAlignment;
+import javafx.stage.FileChooser;
 
 public class PrimaryController extends GenericController {
     @FXML
@@ -33,6 +36,13 @@ public class PrimaryController extends GenericController {
 
         nameColumn.minWidthProperty().bind(tblFiles.widthProperty().divide(2));
         sizeColumn.minWidthProperty().bind(nameColumn.widthProperty());
+
+        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        sizeColumn.setCellValueFactory(new PropertyValueFactory<>("size"));
+
+        btnUpload.setOnAction(actionEvent -> {
+            ((ConnectedPrimary) getControlledScreen()).sendUploadMessage(selectDownloadableFile());
+        });
 
         btnSend.setOnAction(actionEvent -> {
             clickSend();
@@ -69,6 +79,10 @@ public class PrimaryController extends GenericController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private DownloadableFile selectDownloadableFile(){
+        return new DownloadableFile(new FileChooser().showOpenDialog(null));
     }
 
     private void clickSend(){

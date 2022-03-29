@@ -48,6 +48,9 @@ public class ConnectedPrimary extends GenericScreen{
         }).start();
     }
 
+    public void sendUploadMessage(DownloadableFile toSend){
+        chatManager.sendMessage(Tags.DOWNLOADABLE_FILE, toSend.getName(), toSend.getPath(), toSend.getSize() + "");
+    }
     public void sendTextMessage(String messageText){
         chatManager.sendMessage(Tags.TEXT, messageText);
     }
