@@ -1,6 +1,7 @@
 package core.controllers;
 
 import core.screens.ConnectionBroker;
+import core.screens.ConnectionDashboard;
 import core.screens.GenericScreen;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -71,6 +72,7 @@ public class BrokerController extends GenericController {
                 e.printStackTrace();
             }
             System.out.println("cancel interact");
+            new ConnectionDashboard();
         });
     }
 }

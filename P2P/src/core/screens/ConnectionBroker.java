@@ -17,7 +17,7 @@ public class ConnectionBroker extends GenericScreen implements Closeable {
     private final CreateTask[] tasks;
     private final AtomicBoolean brokerageInProgress;
 
-    private ServerSocket binder = null;
+    private ServerSocket binder;
     private Socket heartbeatSocket, chatSocket;
     private HeartbeatSocketManager heartbeatManager;
     private ChatSocketManager chatManager;
@@ -26,11 +26,13 @@ public class ConnectionBroker extends GenericScreen implements Closeable {
     public void close() throws IOException {
         brokerageInProgress.set(false);
 
-        heartbeatSocket.close();
-        chatSocket.close();
-
-        if(binder != null){
+        try {
+            heartbeatSocket.close();
+            chatSocket.close();
             binder.close();
+        }
+        catch (NullPointerException nullPointerException){
+            System.out.println("Sockets not open. Bypassing close()");
         }
     }
 
