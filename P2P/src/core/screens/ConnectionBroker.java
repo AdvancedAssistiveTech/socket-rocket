@@ -2,6 +2,7 @@ package core.screens;
 
 import auxiliary.socket_managers.BrokerSocketManager;
 import auxiliary.socket_managers.ChatSocketManager;
+import auxiliary.socket_managers.GenericSocketManager;
 import auxiliary.socket_managers.HeartbeatSocketManager;
 import core.controllers.BrokerController;
 import javafx.application.Platform;
@@ -17,6 +18,7 @@ public class ConnectionBroker extends GenericScreen implements Closeable {
     private final CreateTask[] tasks;
     private final AtomicBoolean brokerageInProgress;
 
+    private String remoteAddress;
     private ServerSocket binder;
     private Socket heartbeatSocket, chatSocket;
     private HeartbeatSocketManager heartbeatManager;
@@ -63,7 +65,7 @@ public class ConnectionBroker extends GenericScreen implements Closeable {
             taskRunnable.run();
             if(executionUnsuccessful){
                 controller.logMessage("error", true);
-                controller.brokerError();
+                Platform.runLater(controller::brokerError);
             }
             else {
                 controller.logMessage("done", true);
@@ -76,14 +78,16 @@ public class ConnectionBroker extends GenericScreen implements Closeable {
         }
     }
 
-    public ConnectionBroker(String address) { // connection is coming from this device
+    public ConnectionBroker(String address, int targetPort) { // connection is coming from this device
         this();
+
+        remoteAddress = address;
 
         tasks[0].setTaskRunnable(() -> {
             //await acceptance from other machine
             Socket brokerSocket;
             try {
-                brokerSocket = new Socket(address, 2000); //send connect request to other device
+                brokerSocket = new Socket(address, targetPort); //send connect request to other device
                 if(new BrokerSocketManager(brokerSocket).awaitAccept()){
                     brokerSocket.close();
                 }
@@ -94,11 +98,13 @@ public class ConnectionBroker extends GenericScreen implements Closeable {
                 CreateTask.executionFailed();
                 e.printStackTrace();
             }
+
+            binder = GenericSocketManager.createServerSocket(2000); //create serverSocket for future transfer connections
         });
 
         tasks[1].setTaskRunnable(() -> {
             try {
-                heartbeatSocket = new Socket(address, 2001); // create new socket on same port to separate heartbeat pings and text messages
+                heartbeatSocket = new Socket(address, targetPort); // create new socket on same port to separate heartbeat pings and text messages
                 System.out.println(heartbeatSocket);
             } catch (IOException e) {
                 CreateTask.executionFailed();
@@ -110,7 +116,7 @@ public class ConnectionBroker extends GenericScreen implements Closeable {
             int retry = 0;
             while (retry < 5){
                 try {
-                    chatSocket = new Socket(address, 2001); // create new socket on same port to separate heartbeat pings and text messages
+                    chatSocket = new Socket(address, targetPort); // create new socket on same port to separate heartbeat pings and text messages
                     System.out.println(chatSocket);
                     break;
                 } catch (IOException e) {
@@ -124,11 +130,9 @@ public class ConnectionBroker extends GenericScreen implements Closeable {
                 }
             }
             if(retry == 5){
-                System.out.println("client time: " + System.currentTimeMillis());
                 CreateTask.executionFailed();
             }
         });
-
 
         new Thread(() -> {
             for(CreateTask task : tasks){
@@ -137,13 +141,11 @@ public class ConnectionBroker extends GenericScreen implements Closeable {
         }).start();
     }
 
-    public ConnectionBroker(Socket incomingSocket){ // connection is coming to this device
+    public ConnectionBroker(Socket incomingSocket, ServerSocket binder){ // connection is coming to this device
         this();
-        try {
-            binder = new ServerSocket(2001);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
+        remoteAddress = incomingSocket.getInetAddress().getHostAddress();
+        //remotePort = incomingSocket.getPort();
 
         setTitle("server socket here");
 
@@ -154,6 +156,8 @@ public class ConnectionBroker extends GenericScreen implements Closeable {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+
+            this.binder = binder;
         });
 
         tasks[1].setTaskRunnable(() -> {
@@ -165,7 +169,7 @@ public class ConnectionBroker extends GenericScreen implements Closeable {
             }
         });
 
-        tasks[3].setTaskRunnable(() -> { //previously threaded
+        tasks[3].setTaskRunnable(() -> {
             try {
                 chatSocket = binder.accept();
             } catch (IOException e) {
@@ -210,8 +214,8 @@ public class ConnectionBroker extends GenericScreen implements Closeable {
                 new CreateTask("chat manager", () -> {
                     chatManager = new ChatSocketManager(chatSocket);
                     brokerageInProgress.set(false);
-                    Platform.runLater(() -> new ConnectedPrimary(heartbeatManager, chatManager));
-                })
+                    Platform.runLater(() -> new ConnectedPrimary(heartbeatManager, chatManager, binder, remoteAddress));
+                }),
         };
 
         controller.setSteps(tasks.length);

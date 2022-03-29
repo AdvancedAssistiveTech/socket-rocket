@@ -3,9 +3,9 @@ package auxiliary.data.enums;
 public enum Tags {
     // grouped first by argsCount and then alphabetically
     BROKER('b', 0, "broker accept"),
-    INSTRUCTION('i', 1, "instruction"),
+    PORT_INFO('i', 1, "port information"),
     TEXT('t', 1, "plaintext"),
-    DOWNLOAD_REQUEST('r', 2, "download request"),
+    DOWNLOAD_REQUEST('r', 1, "download request"),
     DOWNLOADABLE_FILE('d', 3, "downloadable file"),
     ;
 

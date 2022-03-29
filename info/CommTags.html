@@ -65,7 +65,7 @@
       <tr>
           <td>\r</td>
           <td>DOWNLOAD_REQUEST</td>
-          <td>The <u>DOWNLOAD_REQUEST</u> tag is used by Rocket to indicate a message that contains a port number and file location. The port number is used to connect the client to a new socket that is used to transfer the file pointed to by the location</td>
+          <td>The <u>DOWNLOAD_REQUEST</u> tag is used by Rocket to indicate a message that contains a file location. The application will open a dedicated temporary socket using the address of the remote machine and the dedicated port 2001 and then transfer the file over the socket</td>
       </tr>
       <tr>
           <td>\d</td>

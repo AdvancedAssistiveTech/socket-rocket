@@ -1,7 +1,6 @@
 package core.controllers;
 
 import auxiliary.data.DownloadableFile;
-import auxiliary.data.enums.Tags;
 import core.screens.ConnectedPrimary;
 import core.screens.GenericScreen;
 import javafx.fxml.FXML;
@@ -31,6 +30,8 @@ public class PrimaryController extends GenericController {
     public void setup(GenericScreen controlledScreen, String title){
         super.setup(controlledScreen, title);
 
+        ConnectedPrimary connectedPrimary = ((ConnectedPrimary) getControlledScreen());
+
         btnDownload.prefWidthProperty().bind(filesSideBox.widthProperty().divide(2));
         btnUpload.prefWidthProperty().bind(btnDownload.widthProperty());
 
@@ -41,8 +42,16 @@ public class PrimaryController extends GenericController {
         sizeColumn.setCellValueFactory(new PropertyValueFactory<>("size"));
 
         btnUpload.setOnAction(actionEvent -> {
-            ((ConnectedPrimary) getControlledScreen()).sendUploadMessage(selectDownloadableFile());
+            try {
+                DownloadableFile uploadTarget = selectDownloadableFile();
+                connectedPrimary.sendUploadMessage(uploadTarget);
+            }
+            catch (NullPointerException pointerException){
+                System.out.println("file selection cancelled");
+            }
         });
+
+        btnDownload.setOnAction(actionEvent -> connectedPrimary.sendDownloadMessage(tblFiles.getSelectionModel().getSelectedItem()));
 
         btnSend.setOnAction(actionEvent -> {
             clickSend();
@@ -81,7 +90,7 @@ public class PrimaryController extends GenericController {
         }
     }
 
-    private DownloadableFile selectDownloadableFile(){
+    private DownloadableFile selectDownloadableFile() throws NullPointerException{
         return new DownloadableFile(new FileChooser().showOpenDialog(null));
     }
 

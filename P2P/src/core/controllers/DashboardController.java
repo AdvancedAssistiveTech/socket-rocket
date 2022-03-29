@@ -2,6 +2,7 @@ package core.controllers;
 
 import auxiliary.gui_elements.IncomingConnection;
 import core.screens.ConnectionBroker;
+import core.screens.ConnectionDashboard;
 import core.screens.GenericScreen;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -22,6 +23,8 @@ public class DashboardController extends GenericController {
     @FXML
     private ComboBox<String> targetIDCombo;
     @FXML
+    private ComboBox<Integer> targetPortCombo;
+    @FXML
     private Button connectBtn;
     @FXML
     private TabPane mainPanel;
@@ -32,31 +35,54 @@ public class DashboardController extends GenericController {
     @FXML
     private Label lblTargetID;
 
-    private void updateConnectBtnText(String text){
-        connectBtn.setText(String.format("Connect to %s", text));
+    private void updateDashboard(ComboBox<String> comboBox){
+        comboBox.setValue(comboBox.getEditor().getText());
+        updateConnectButton();
+    }
+    private void updateConnectButton(){
+        connectBtn.setText(String.format("Connect to %s on %s", targetIDCombo.getValue(), targetPortCombo.getValue()));
     }
 
     public void addIncoming(Socket incomingConnection){
-        Platform.runLater(() -> incomingBox.getChildren().add(new IncomingConnection(incomingConnection, this).getRoot()));
+        Platform.runLater(() -> incomingBox.getChildren().add(new IncomingConnection(incomingConnection, (ConnectionDashboard) controlledScreen).getRoot()));
     }
     @Override
     public void setup(GenericScreen controlledScreen, String title){
         super.setup(controlledScreen, title);
 
         logoView.setImage(GenericScreen.ico_up);
-        localIDLabel.setText(String.format("This device's ID is %s", "127.0.0.1"));
+        //localIDLabel.setText(String.format("This device's ID is %s on %s", "127.0.0.1", ""));
 
         targetIDCombo.setOnKeyReleased(keyEvent -> {
-            targetIDCombo.setValue(targetIDCombo.getEditor().getText());
+            /*
+            synchroniseComboValueAndText(targetIDCombo);
             updateConnectBtnText(targetIDCombo.getValue());
+             */
+            updateDashboard(targetIDCombo);
         });
         targetIDCombo.setOnAction(actionEvent -> {
-            targetIDCombo.setValue(targetIDCombo.getEditor().getText());
-            updateConnectBtnText(targetIDCombo.getValue());
+            updateDashboard(targetIDCombo);
+        });
+        targetPortCombo.setOnKeyReleased(keyEvent -> {
+            targetPortCombo.setValue(Integer.parseInt(targetPortCombo.getEditor().getText()));
+            updateConnectButton();
+        });
+        targetPortCombo.setOnAction(actionEvent -> {
+            targetPortCombo.setValue(Integer.parseInt(targetPortCombo.getEditor().getText()));
+            updateConnectButton();
         });
 
         targetIDCombo.getItems().add("localhost");
+        targetPortCombo.getItems().add(2000);
 
-        connectBtn.setOnAction(actionEvent -> new ConnectionBroker(targetIDCombo.getValue()));
+        targetIDCombo.getSelectionModel().selectFirst();
+        targetPortCombo.getSelectionModel().selectFirst();
+        updateConnectButton();
+
+        connectBtn.setOnAction(actionEvent -> new ConnectionBroker(targetIDCombo.getValue(), targetPortCombo.getValue()));
+    }
+
+    public void setLocalInfo(String ID, int port){
+        localIDLabel.setText(String.format("This device's ID is %s on %s", ID, port));
     }
 }
