@@ -11,6 +11,7 @@ public abstract class GenericGUIElement {
     protected URL fxmlResource;
     protected FXMLLoader loader;
     protected Scene scene;
+    protected Node root;
 
     public GenericGUIElement(URL fxmlResource){
         this.fxmlResource = fxmlResource;
@@ -20,9 +21,10 @@ public abstract class GenericGUIElement {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        root = loader.getRoot();
     }
 
     public Node getRoot(){
-        return loader.getRoot();
+        return root;
     }
 }

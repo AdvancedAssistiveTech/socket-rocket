@@ -9,7 +9,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public abstract class GenericSocketManager implements Closeable {
-    private final Socket socket;
+    protected final Socket socket;
     protected DataInputStream inputStream;
     protected DataOutputStream outputStream;
 

@@ -1,6 +1,7 @@
 package core.controllers;
 
 import auxiliary.data.DownloadableFile;
+import auxiliary.gui_elements.FileProgressBox;
 import core.screens.ConnectedPrimary;
 import core.screens.GenericScreen;
 import javafx.fxml.FXML;
@@ -89,6 +90,15 @@ public class PrimaryController extends GenericController {
             e.printStackTrace();
         }
     }
+
+    public void addFileProgressBox(FileProgressBox box){
+        filesSideBox.getChildren().add(box.getRoot());
+    }
+
+    public void refreshFileBox(){
+        filesSideBox.setStyle("-fx-border-color: " + (fxBorder = fxBorder.equals("#808080") ? "#808081" : "#808080"));
+    }
+    private String fxBorder = "#808080";
 
     private DownloadableFile selectDownloadableFile() throws NullPointerException{
         return new DownloadableFile(new FileChooser().showOpenDialog(null));

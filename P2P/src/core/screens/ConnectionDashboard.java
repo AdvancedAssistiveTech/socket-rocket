@@ -1,5 +1,6 @@
 package core.screens;
 
+import auxiliary.gui_elements.IncomingConnection;
 import auxiliary.socket_managers.GenericSocketManager;
 import core.controllers.DashboardController;
 
@@ -34,7 +35,7 @@ public class ConnectionDashboard extends GenericScreen {
                 try{
                     newCandidate = serverSocket.accept();
                     socketCandidates.add(newCandidate); //add all incoming connections to candidate list
-                    controller.addIncoming(newCandidate);
+                    controller.addIncoming(new IncomingConnection(newCandidate, this));
                 }
                 catch (IOException e){
                     e.printStackTrace();

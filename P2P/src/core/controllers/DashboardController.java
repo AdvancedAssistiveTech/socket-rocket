@@ -2,7 +2,6 @@ package core.controllers;
 
 import auxiliary.gui_elements.IncomingConnection;
 import core.screens.ConnectionBroker;
-import core.screens.ConnectionDashboard;
 import core.screens.GenericScreen;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -12,8 +11,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TabPane;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
-
-import java.net.Socket;
 
 public class DashboardController extends GenericController {
     @FXML
@@ -43,8 +40,8 @@ public class DashboardController extends GenericController {
         connectBtn.setText(String.format("Connect to %s on %s", targetIDCombo.getValue(), targetPortCombo.getValue()));
     }
 
-    public void addIncoming(Socket incomingConnection){
-        Platform.runLater(() -> incomingBox.getChildren().add(new IncomingConnection(incomingConnection, (ConnectionDashboard) controlledScreen).getRoot()));
+    public void addIncoming(IncomingConnection incomingConnection){
+        Platform.runLater(() -> incomingBox.getChildren().add(incomingConnection.getRoot()));
     }
     @Override
     public void setup(GenericScreen controlledScreen, String title){

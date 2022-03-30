@@ -3,6 +3,7 @@ package core.screens;
 import auxiliary.data.DownloadableFile;
 import auxiliary.data.Message;
 import auxiliary.data.enums.Tags;
+import auxiliary.gui_elements.FileProgressBox;
 import auxiliary.socket_managers.ChatSocketManager;
 import auxiliary.socket_managers.HeartbeatSocketManager;
 import auxiliary.socket_managers.TransferSocketManager;
@@ -20,13 +21,14 @@ public class ConnectedPrimary extends GenericScreen{
     private final ChatSocketManager chatManager;
     private final ServerSocket binder;
     private final String remoteAddress;
+    private final PrimaryController controller;
 
     private final List<TransferSocketManager> transfers = new ArrayList<>();
 
     private int remotePort;
     public ConnectedPrimary(HeartbeatSocketManager heartbeatManager, ChatSocketManager chatManager, ServerSocket binder, String remoteAddress) {
         super(GenericScreen.class.getResource("/ConnectedPrimaryXML.fxml"), "sRocket");
-        PrimaryController controller = (PrimaryController) this.controller;
+        controller = (PrimaryController) super.controller;
 
         this.chatManager = chatManager;
         this.binder = binder;
@@ -89,21 +91,26 @@ public class ConnectedPrimary extends GenericScreen{
     public void sendUploadMessage(DownloadableFile toSend){
         chatManager.sendMessage(Tags.DOWNLOADABLE_FILE, toSend.getName(), toSend.getPath(), toSend.getSize() + "");
     }
+
     public void sendTextMessage(String messageText){
         chatManager.sendMessage(Tags.TEXT, messageText);
     }
 
     private void sendFile(File file) throws IOException {
         DownloadableFile toSend = new DownloadableFile(file);
-        TransferSocketManager transferManager = new TransferSocketManager(binder.accept());
-
-        transferManager.sendFile(toSend);
+        new TransferSocketManager(binder.accept(), toSend).sendFile();
     }
 
     private void receiveFile(DownloadableFile toReceive, Socket transferSocket) throws IOException {
-        TransferSocketManager transferManager = new TransferSocketManager(transferSocket);
+        TransferSocketManager transferManager = new TransferSocketManager(transferSocket, toReceive);
         transfers.add(transferManager);
-        transferManager.receiveFile(toReceive);
+        Platform.runLater(() -> {
+            controller.addFileProgressBox(new FileProgressBox(transferManager, toReceive.getName(), this));
+            controller.refreshFileBox();
+        });
+        transferManager.receiveFile();
+        Platform.runLater(controller::refreshFileBox);
+        transferManager.close();
         transfers.remove(transferManager);
     }
 }

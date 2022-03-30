@@ -13,6 +13,7 @@ module P2P {
     exports core.screens;
     opens core.screens to javafx.fxml, javafx.graphics;
 
+    exports auxiliary.gui_elements;
     exports auxiliary.socket_managers;
     exports auxiliary.data;
     exports auxiliary.data.enums;

@@ -13,7 +13,7 @@ import java.net.Socket;
 public class IncomingConnection extends GenericGUIElement{
     public IncomingConnection(Socket incomingSocket, ConnectionDashboard parentDashboard) {
         super(GenericGUIElement.class.getResource("/IncomingConnectionXML.fxml"));
-        HBox root = loader.getRoot();
+        HBox root = (HBox) super.root;
         TextFlow infoFlow = (TextFlow) root.getChildren().get(0);
         Button connectButton = (Button) root.getChildren().get(1), rejectButton = (Button) root.getChildren().get(2);
 
